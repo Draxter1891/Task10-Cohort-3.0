@@ -1,26 +1,112 @@
+//FONTS
+@font-face {
+  font-family: hassM;
+  src: url("./assets/fonts/HaasUnicaSH-Medium.woff2");
+}
+@font-face {
+  font-family: hassR;
+  src: url("./assets/fonts/HaasUnicaSH-Regular.woff2");
+}
+
+//THEME
+:root {
+  --primary-bg: #d4d4d4;
+  --nav-bg: #54a39f;
+  --text-color: #272727;
+}
+[data-theme="dark"] {
+  --primary-bg: #000000;
+  --nav-bg: #8f2626;
+  --text-color: #d4d4d4;
+}
+
+//DEFAULTS
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family:gilroy;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: gilroy;
 }
 html,
 body {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
-main{
-    height: 100%;
-    width: 100%;
+//STYLING - MOBILE FIRST
+main {
+  height: 100%;
+  width: 100%;
+  background: var(--primary-bg);
+  color: var(--text-color);
 }
 
+.header {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--nav-bg);
+  display: flex;
+  justify-content: space-between;
+  h1 {
+    font-size: 2rem;
+    user-select: none;
+    font-family: hassM;
+    font-weight: 500;
+  }
 
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 3.5rem;
+    height: 2rem;
 
-.hidden{
-    display: none;
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 1rem;
+      transition: 0.4s;
+      #ball {
+        position: absolute;
+        height: 1.5rem;
+        width: 1.5rem;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+        text-align: center;
+        align-content: center;
+        i{
+            font-size: 1rem;
+        }
+      }
+    }
+
+    input:checked + .slider {
+      background-color: #db1616;
+    }
+    input:checked + .slider #ball {
+      background: #410101;
+      transform: translate(100%);
+    }
+  }
 }
 
+.hidden {
+  display: none;
+}
 
-@media(min-width:1024px){
+//STYLING - DESKTOP VIEW
+@media (min-width: 1024px) {
 }

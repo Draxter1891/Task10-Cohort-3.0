@@ -1,3 +1,23 @@
+@font-face {
+  font-family: hassM;
+  src: url("./assets/fonts/HaasUnicaSH-Medium.woff2");
+}
+@font-face {
+  font-family: hassR;
+  src: url("./assets/fonts/HaasUnicaSH-Regular.woff2");
+}
+:root {
+  --primary-bg: #d4d4d4;
+  --nav-bg: #54a39f;
+  --text-color: #272727;
+}
+
+[data-theme=dark] {
+  --primary-bg: #000000;
+  --nav-bg: #8f2626;
+  --text-color: #d4d4d4;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -14,6 +34,68 @@ body {
 main {
   height: 100%;
   width: 100%;
+  background: var(--primary-bg);
+  color: var(--text-color);
+}
+
+.header {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--nav-bg);
+  display: flex;
+  justify-content: space-between;
+}
+.header h1 {
+  font-size: 2rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  font-family: hassM;
+  font-weight: 500;
+}
+.header .switch {
+  position: relative;
+  display: inline-block;
+  width: 3.5rem;
+  height: 2rem;
+}
+.header .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.header .switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 1rem;
+  transition: 0.4s;
+}
+.header .switch .slider #ball {
+  position: absolute;
+  height: 1.5rem;
+  width: 1.5rem;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+  text-align: center;
+  align-content: center;
+}
+.header .switch .slider #ball i {
+  font-size: 1rem;
+}
+.header .switch input:checked + .slider {
+  background-color: #db1616;
+}
+.header .switch input:checked + .slider #ball {
+  background: #410101;
+  transform: translate(100%);
 }
 
 .hidden {

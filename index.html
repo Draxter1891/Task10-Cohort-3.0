@@ -5,10 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FocusX - Productivity App</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
   </head>
+  <!-- data-theme="dark" -->
   <body>
     <main class="app">
-      <header class="header"></header>
+      <header class="header">
+        <h1>FocusX</h1>
+        <label class="switch">
+          <input type="checkbox" id="dark" />
+          <span class="slider">
+            <span id="ball">
+              <i class="ri-sun-line" id="theme-ico"></i>
+            </span>
+          </span>
+        </label>
+      </header>
     </main>
 
     <script src="script.js"></script>
