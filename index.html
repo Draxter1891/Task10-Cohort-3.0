@@ -11,7 +11,7 @@
     />
   </head>
   <!-- data-theme="dark" -->
-  <body>
+  <body data-theme="dark">
     <main class="app">
       <header class="header">
         <h1>FocusX</h1>
@@ -24,6 +24,43 @@
           </span>
         </label>
       </header>
+      <section id="dashboard">
+        <div class="left">
+          <div class="left-first">
+            <h4>5 July, 2026</h4>
+            <h3>Sunday, 10:27:12 PM</h3>
+            <p>New Delhi</p>
+          </div>
+          <div class="left-second"></div>
+        </div>
+
+        <div class="right">
+          <div class="feature-cta" data-feature="todo-feature"></div>
+          <div class="feature-cta" data-feature="planner-feature"></div>
+          <div class="feature-cta" data-feature="goals-feature"></div>
+          <div class="feature-cta" data-feature="pomodoro-feature"></div>
+          <div class="feature-cta" data-feature="quote-feature"></div>
+        </div>
+      </section>
+
+      <section id="feature-view" class="hidden">
+        <button id="back-btn"><i class="ri-arrow-left-line"></i></button>
+
+        <!-- Todo Section -->
+        <section id="todo-feature" class="feature hidden">TODO</section>
+
+        <!-- Planner -->
+        <section id="planner-feature" class="feature hidden">Planner</section>
+
+        <!-- Goals -->
+        <section id="goals-feature" class="feature hidden">Goals</section>
+
+        <!-- Pomodoro -->
+        <section id="pomodoro-feature" class="feature hidden">Pomodoro</section>
+
+        <!-- Quote -->
+        <section id="quote-feature" class="feature hidden">Quote</section>
+      </section>
     </main>
 
     <script src="script.js"></script>
