@@ -69,6 +69,13 @@ const ui = {
   temp: document.querySelector("#temp"),
   tempUnit: document.querySelector("#temp-unit"),
   weatherType: document.querySelector("#weather-type"),
+  //TODO
+  taskComposer: document.querySelector("#composer"),
+  taskInput: document.querySelector("#taskInput"),
+  taskList: document.querySelector("#taskList"),
+  taskCheck: document.querySelector(".task-check"),
+  taskImp: document.querySelector("#task-imp"),
+  taskDel: document.querySelector("#task-delete"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -154,6 +161,7 @@ let openFeature = (featureId) => {
     .querySelectorAll(".feature")
     .forEach((elem) => elem.classList.add("hidden"));
   document.getElementById(featureId).classList.remove("hidden");
+  renderTaskUI()
 };
 
 let closeFeature = () => {
@@ -172,4 +180,81 @@ let dynamicWallpaper = (hr = 12) => {
     dashboard.style.background =
       "url('/assets/media/moonblue.jpg') left/cover no-repeat";
   }
+};
+
+//TODO-feture
+let tasks = [
+  {
+    id: 1,
+    task: "TODo completion",
+    isImp: false,
+    isCompleted: false,
+  },
+];
+ui.taskComposer.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let task = ui.taskInput.value;
+  console.log(task)
+  tasks.push({
+    id: Date.now(),
+    task,
+    isImp: false,
+    isCompleted: false,
+  });
+  console.log(tasks)
+  renderTaskUI();
+});
+
+let renderTaskUI = () => {
+  taskList.innerHTML = "";
+  tasks.forEach((elem) => {
+    taskList.innerHTML += `
+    <li class="task">
+                <button
+                  class="task-check"
+                  aria-label="Mark complete"
+                  title="Complete"
+                >
+                </button>
+
+                <span class="task-label">${elem.task}</span>
+
+                <div class="task-actions">
+                  <button
+                    class="task-icon task-icon--star"
+                    id="task-imp"
+                    aria-label="Mark important"
+                    title="Important"
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                      <path
+                        d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8L6 21l1.6-7L2.2 9.2l7.1-.6L12 2z"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        fill="none"
+                      />
+                    </svg>
+                  </button>
+
+                  <button
+                    class="task-icon task-icon--delete"
+                    id="task-delete"
+                    aria-label="Delete task"
+                    title="Delete"
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                      <path
+                        d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m2 0v13a1 1 0 01-1 1H8a1 1 0 01-1-1V7h10z"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </li>
+    `;
+  });
 };
