@@ -170,13 +170,21 @@ main {
       box-shadow: var(--professional-shadow);
       height: 32%;
       aspect-ratio: 1/1;
-      border-radius: 50%;
+      border-radius: 1rem;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent; //helps to remove blocky effect of clicking on smarphones
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      gap: .5rem;
+      .feature-label{
+        font-size: .7rem;
+        font-weight: 900;
+        color: var(--text-color);
+        text-transform: uppercase;
+      }
       i {
         font-size: 2.6rem;
       }
@@ -192,6 +200,9 @@ main {
         }
         .gifs {
           display: block;
+        }
+        .feature-label{
+          display: none;
         }
       }
     }
@@ -319,6 +330,7 @@ main {
     color: var(--text-color);
     font-family: system-ui;
     border-left: 3px solid rgb(255, 196, 0);
+    cursor: pointer;
   }
 
   .task-check {
@@ -342,7 +354,8 @@ main {
 
   .task-label {
     flex: 1;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 600;
     line-height: 1.4;
   }
 
@@ -364,11 +377,11 @@ main {
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s ease;
+    &:hover {
+      background: #dbdbda;
+    }
   }
 
-  .task-icon:hover {
-    background: #dbdbda;
-  }
   .task-icon--star:hover {
     color: #4a8cc9;
   }
@@ -378,20 +391,19 @@ main {
 
   .task--important {
     border-color: rgba(201, 123, 74, 0.4);
-  }
-
-  .task--important .task-icon--star {
+    background: #4092fd3b;
     color: #4092fd;
-    background: rgba(201, 123, 74, 0.12);
   }
 
-  .task--done .task__check {
-    background: #7c8b7a;
-    border-color: #7c8b7a;
-    color: #fff;
+  .task-check{
+    background: rgb(223, 223, 241);
+    border: 1px solid rgb(159, 159, 190);
+  }
+  .task--done{
+    background: #05b3f8;
   }
 
-  .task--done .task__label {
+  .task-label-done {
     color: #8a8680;
     text-decoration: line-through;
   }
@@ -423,8 +435,6 @@ main {
       flex-wrap: nowrap;
       .feature-cta {
         height: 15%;
-        aspect-ratio: 1/1;
-        border-radius: 50%;
         cursor: pointer;
       }
     }

@@ -74,7 +74,6 @@ const ui = {
   taskInput: document.querySelector("#taskInput"),
   taskList: document.querySelector("#taskList"),
   taskCheck: document.querySelector(".task-check"),
-  taskImp: document.querySelector("#task-imp"),
   taskDel: document.querySelector("#task-delete"),
 };
 
@@ -93,7 +92,6 @@ let getCurrentLocation = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         ui.temp.textContent = data.current.temperature_2m;
         ui.tempUnit.textContent = data.current_units.temperature_2m;
         ui.weatherType.textContent = WEATHER_CODES[data.current.weather_code];
@@ -161,7 +159,7 @@ let openFeature = (featureId) => {
     .querySelectorAll(".feature")
     .forEach((elem) => elem.classList.add("hidden"));
   document.getElementById(featureId).classList.remove("hidden");
-  renderTaskUI()
+  renderers[`${featureId}`]();
 };
 
 let closeFeature = () => {
@@ -175,7 +173,7 @@ let closeFeature = () => {
 let dynamicWallpaper = (hr = 12) => {
   if (hr >= 5 && hr <= 19) {
     dashboard.style.background =
-      "url('https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png')";
+      "url('https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png') center/cover no-repeat";
   } else {
     dashboard.style.background =
       "url('/assets/media/moonblue.jpg') left/cover no-repeat";
@@ -183,48 +181,77 @@ let dynamicWallpaper = (hr = 12) => {
 };
 
 //TODO-feture
-let tasks = [
-  {
-    id: 1,
-    task: "TODo completion",
-    isImp: false,
-    isCompleted: false,
-  },
-];
+let saveTasks = (tasks) => {
+  localStorage.setItem("todo", JSON.stringify(tasks));
+};
+let getTasks = () => {
+  return JSON.parse(localStorage.getItem("todo")) || [];
+};
+
+let tasks = getTasks();
 ui.taskComposer.addEventListener("submit", (e) => {
   e.preventDefault();
   let task = ui.taskInput.value;
-  console.log(task)
+  if (!task.trim()) {
+    alert("Please enter the task!");
+    return;
+  }
   tasks.push({
     id: Date.now(),
     task,
     isImp: false,
     isCompleted: false,
   });
-  console.log(tasks)
-  renderTaskUI();
+
+  ui.taskComposer.reset();
+  saveTasks(tasks);
+  renderers["todo-feature"]();
 });
 
-let renderTaskUI = () => {
-  taskList.innerHTML = "";
-  tasks.forEach((elem) => {
-    taskList.innerHTML += `
-    <li class="task">
+let taskDelete = (id) => {
+  let deletionIndex = tasks.findIndex((elem) => elem.id === id);
+  tasks.splice(deletionIndex, 1);
+  saveTasks(tasks);
+  renderers["todo-feature"]();
+};
+
+let taskMarkImp = (id) => {
+  let clickedElem = tasks.find((elem) => elem.id === id);
+  clickedElem.isImp = !clickedElem.isImp;
+  saveTasks(tasks);
+  renderers["todo-feature"]();
+};
+
+let taskMarkDone = (id) => {
+  let clickedElem = tasks.find((elem) => elem.id === id);
+  clickedElem.isCompleted = !clickedElem.isCompleted;
+  console.log(tasks)
+  saveTasks(tasks);
+  renderers["todo-feature"]();
+};
+
+let renderers = {
+  "todo-feature": () => {
+    taskList.innerHTML = "";
+    tasks.forEach((elem) => {
+      taskList.innerHTML += `
+    <li class="task" data-id = "${elem.id}">
                 <button
-                  class="task-check"
+                  class="task-check ${elem.isCompleted === true? "task--done":""}"
                   aria-label="Mark complete"
                   title="Complete"
                 >
                 </button>
 
-                <span class="task-label">${elem.task}</span>
+                <span class="task-label ${elem.isCompleted===true? "task-label-done": ""}">${elem.task}</span>
 
                 <div class="task-actions">
                   <button
-                    class="task-icon task-icon--star"
-                    id="task-imp"
+                    class="task-icon task-icon--star ${elem.isImp === true ? "task--important" : ""}"
                     aria-label="Mark important"
                     title="Important"
+                    class = "task-important"
+                    
                   >
                     <svg viewBox="0 0 24 24" width="16" height="16">
                       <path
@@ -238,9 +265,10 @@ let renderTaskUI = () => {
 
                   <button
                     class="task-icon task-icon--delete"
-                    id="task-delete"
                     aria-label="Delete task"
                     title="Delete"
+                    class = "task-delete"
+                    
                   >
                     <svg viewBox="0 0 24 24" width="16" height="16">
                       <path
@@ -254,7 +282,39 @@ let renderTaskUI = () => {
                     </svg>
                   </button>
                 </div>
-              </li>
+      </li>
     `;
-  });
+    });
+  },
+  "planner-feature": () => {
+    console.log("Planner feature called...");
+  },
+  "goals-feature": () => {
+    console.log("Goals feature called...");
+  },
+  "pomodoro-feature": () => {
+    console.log("pomodoro feature called...");
+  },
+  "quote-feature": () => {
+    console.log("quote feature called...");
+  },
 };
+
+ui.taskList.addEventListener("click", (e) => {
+  // console.log(e.target.closest("li").getAttribute("data-id"));
+  // console.log(e.target);
+  let dltBtn = e.target.closest(".task-icon--delete");
+  let impBtn = e.target.closest(".task-icon--star");
+  let completedBtn = e.target.closest(".task-check");
+  let taskID = Number(e.target.closest("li").dataset.id);
+  if (dltBtn) {
+    taskDelete(taskID);
+  }
+  if (impBtn) {
+    // console.log("important clicked",taskID)
+    taskMarkImp(taskID);
+  }
+  if (completedBtn) {
+    taskMarkDone(taskID)
+  }
+});

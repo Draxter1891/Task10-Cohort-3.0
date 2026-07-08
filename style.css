@@ -165,13 +165,21 @@ main {
   box-shadow: var(--professional-shadow);
   height: 32%;
   aspect-ratio: 1/1;
-  border-radius: 50%;
+  border-radius: 1rem;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#dashboard .right .feature-cta .feature-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: var(--text-color);
+  text-transform: uppercase;
 }
 #dashboard .right .feature-cta i {
   font-size: 2.6rem;
@@ -188,6 +196,9 @@ main {
 }
 #dashboard .right .feature-cta:hover .gifs {
   display: block;
+}
+#dashboard .right .feature-cta:hover .feature-label {
+  display: none;
 }
 
 #feature-view {
@@ -302,6 +313,7 @@ main {
   color: var(--text-color);
   font-family: system-ui;
   border-left: 3px solid rgb(255, 196, 0);
+  cursor: pointer;
 }
 #todo-feature .task-check {
   flex-shrink: 0;
@@ -322,7 +334,8 @@ main {
 }
 #todo-feature .task-label {
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
   line-height: 1.4;
 }
 #todo-feature .task-actions {
@@ -354,17 +367,17 @@ main {
 }
 #todo-feature .task--important {
   border-color: rgba(201, 123, 74, 0.4);
-}
-#todo-feature .task--important .task-icon--star {
+  background: rgba(64, 146, 253, 0.231372549);
   color: #4092fd;
-  background: rgba(201, 123, 74, 0.12);
 }
-#todo-feature .task--done .task__check {
-  background: #7c8b7a;
-  border-color: #7c8b7a;
-  color: #fff;
+#todo-feature .task-check {
+  background: rgb(223, 223, 241);
+  border: 1px solid rgb(159, 159, 190);
 }
-#todo-feature .task--done .task__label {
+#todo-feature .task--done {
+  background: #05b3f8;
+}
+#todo-feature .task-label-done {
   color: #8a8680;
   text-decoration: line-through;
 }
@@ -396,8 +409,6 @@ main {
   }
   #dashboard .right .feature-cta {
     height: 15%;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
     cursor: pointer;
   }
   #todo-feature .board .composer {
