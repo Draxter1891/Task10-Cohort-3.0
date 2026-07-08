@@ -178,9 +178,9 @@ main {
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: .5rem;
-      .feature-label{
-        font-size: .7rem;
+      gap: 0.5rem;
+      .feature-label {
+        font-size: 0.7rem;
         font-weight: 900;
         color: var(--text-color);
         text-transform: uppercase;
@@ -201,7 +201,7 @@ main {
         .gifs {
           display: block;
         }
-        .feature-label{
+        .feature-label {
           display: none;
         }
       }
@@ -317,6 +317,18 @@ main {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    .todo-empty-state {
+      color: #797878;
+      font-size: 2rem;
+      font-weight: 200;
+      text-transform: capitalize;
+      text-align: center;
+      user-select: none;
+      &::after {
+        content: " . . . ";
+      }
+    }
   }
 
   .task {
@@ -395,17 +407,95 @@ main {
     color: #4092fd;
   }
 
-  .task-check{
+  .task-check {
     background: rgb(223, 223, 241);
     border: 1px solid rgb(159, 159, 190);
   }
-  .task--done{
+  .task--done {
     background: #05b3f8;
   }
 
   .task-label-done {
     color: #8a8680;
     text-decoration: line-through;
+  }
+}
+
+#planner-feature {
+  width: 100%;
+  // height: 100%;
+  padding: 2rem;
+  h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  #clear-all-planner {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 5rem;
+    font-size: 1rem;
+    align-items: center;
+    position: absolute;
+    right: 1rem;
+    top: 1.5rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    background: rgb(139, 8, 8);
+    color: white;
+    font-weight: 400;
+    transition: all ease 0.3s;
+    &:active {
+      transform: scale(1.01);
+      background: #c20101;
+    }
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  .planner-container {
+    margin-top: 4rem;
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    // overflow-y: auto;
+    li {
+      width: 100%;
+      background-color: #05b3f8;
+      border-radius: 1rem;
+      overflow: hidden;
+      p {
+        font-size: 1.5rem;
+        width: 100%;
+        background-color: #bbd6ffe7;
+        padding: 0.4rem 1rem;
+      }
+      textArea {
+        width: 100%;
+        resize: none;
+        padding: 1rem;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        font-weight: 500;
+        text-wrap-mode: wrap;
+        &::placeholder {
+          color: #797878;
+        }
+      }
+    }
+    .hightlight-task {
+      box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.651);
+      background-color: #23fdd9;
+      p {
+        background-color: #23fdd9;
+        color: rgb(29, 165, 219);
+        font-weight: 600;
+      }
+    }
   }
 }
 
@@ -443,6 +533,21 @@ main {
     .board {
       .composer {
         width: 50%;
+      }
+    }
+  }
+
+  #planner-feature {
+    #clear-all-planner {
+      padding: 0.5rem 1rem;
+    }
+    .planner-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      li {
+        margin-inline: auto;
+        width: 40%;
       }
     }
   }

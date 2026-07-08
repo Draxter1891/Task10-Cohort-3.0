@@ -73,8 +73,9 @@ const ui = {
   taskComposer: document.querySelector("#composer"),
   taskInput: document.querySelector("#taskInput"),
   taskList: document.querySelector("#taskList"),
-  taskCheck: document.querySelector(".task-check"),
-  taskDel: document.querySelector("#task-delete"),
+  //PLANNER
+  plannerContainer: document.querySelector(".planner-container"),
+  clearAllPlans: document.querySelector("#clear-all-planner"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -170,8 +171,8 @@ let closeFeature = () => {
   ui.dashboard.classList.remove("hidden");
 };
 
-let dynamicWallpaper = (hr = 12) => {
-  if (hr >= 5 && hr <= 19) {
+let dynamicWallpaper = (hr) => {
+  if (hr >= 5 && hr < 19) {
     dashboard.style.background =
       "url('https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png') center/cover no-repeat";
   } else {
@@ -225,25 +226,80 @@ let taskMarkImp = (id) => {
 let taskMarkDone = (id) => {
   let clickedElem = tasks.find((elem) => elem.id === id);
   clickedElem.isCompleted = !clickedElem.isCompleted;
-  console.log(tasks)
+  console.log(tasks);
   saveTasks(tasks);
   renderers["todo-feature"]();
 };
 
+ui.taskList.addEventListener("click", (e) => {
+  let dltBtn = e.target.closest(".task-icon--delete");
+  let impBtn = e.target.closest(".task-icon--star");
+  let completedBtn = e.target.closest(".task-check");
+  let taskID = Number(e.target.closest("li").dataset.id);
+  if (dltBtn) {
+    taskDelete(taskID);
+  }
+  if (impBtn) {
+    taskMarkImp(taskID);
+  }
+  if (completedBtn) {
+    taskMarkDone(taskID);
+  }
+});
+
+//Planner
+let savePlanner = (planner) => {
+  localStorage.setItem("planner", JSON.stringify(planner));
+};
+
+let getPlanner = () => {
+  return JSON.parse(localStorage.getItem("planner")) || {};
+};
+
+ui.clearAllPlans.addEventListener("click", (e) => {
+  let allPlans = getPlanner();
+
+  if (Object.keys(allPlans).length === 0) {
+    alert("Input fields are already empty.");
+    return;
+  }
+
+  let clearPermission = confirm(
+    "Attention: All fields will be wiped, this action can't be reverted!",
+  );
+
+  if (clearPermission) {
+    for (let key in allPlans) {
+      delete allPlans[key];
+    }
+    savePlanner(allPlans);
+    renderers["planner-feature"]();
+  }
+});
+
+ui.plannerContainer.addEventListener("input", (e) => {
+  let allPlans = getPlanner();
+  allPlans[e.target.dataset.hour] = e.target.value;
+  savePlanner(allPlans);
+});
+
 let renderers = {
   "todo-feature": () => {
     taskList.innerHTML = "";
+    if (tasks.length === 0) {
+      taskList.innerHTML += `<h1 class="todo-empty-state">No Tasks yet<h1/>`;
+    }
     tasks.forEach((elem) => {
       taskList.innerHTML += `
     <li class="task" data-id = "${elem.id}">
                 <button
-                  class="task-check ${elem.isCompleted === true? "task--done":""}"
+                  class="task-check ${elem.isCompleted === true ? "task--done" : ""}"
                   aria-label="Mark complete"
                   title="Complete"
                 >
                 </button>
 
-                <span class="task-label ${elem.isCompleted===true? "task-label-done": ""}">${elem.task}</span>
+                <span class="task-label ${elem.isCompleted === true ? "task-label-done" : ""}">${elem.task}</span>
 
                 <div class="task-actions">
                   <button
@@ -287,7 +343,26 @@ let renderers = {
     });
   },
   "planner-feature": () => {
-    console.log("Planner feature called...");
+    let allPlans = getPlanner();
+
+    ui.plannerContainer.innerHTML = "";
+    
+    let currentHr = new Date();
+    for (let i = 6; i < 24; i++) {
+      let li = document.createElement("li");
+      let p = document.createElement("p");
+      let inp = document.createElement("textArea");
+      inp.dataset.hour = i;
+      if(i=== currentHr.getHours()){
+        li.classList.add("hightlight-task")
+      }
+      p.textContent = `${String(i).padStart(2, 0)}:00 - ${String(i + 1).padStart(2, 0)}:00`;
+      inp.type = "text";
+      inp.placeholder = "what's your task for this hour..?";
+      inp.value = allPlans[i] || "";
+      li.append(p, inp);
+      ui.plannerContainer.append(li);
+    }
   },
   "goals-feature": () => {
     console.log("Goals feature called...");
@@ -299,22 +374,3 @@ let renderers = {
     console.log("quote feature called...");
   },
 };
-
-ui.taskList.addEventListener("click", (e) => {
-  // console.log(e.target.closest("li").getAttribute("data-id"));
-  // console.log(e.target);
-  let dltBtn = e.target.closest(".task-icon--delete");
-  let impBtn = e.target.closest(".task-icon--star");
-  let completedBtn = e.target.closest(".task-check");
-  let taskID = Number(e.target.closest("li").dataset.id);
-  if (dltBtn) {
-    taskDelete(taskID);
-  }
-  if (impBtn) {
-    // console.log("important clicked",taskID)
-    taskMarkImp(taskID);
-  }
-  if (completedBtn) {
-    taskMarkDone(taskID)
-  }
-});
