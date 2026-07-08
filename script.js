@@ -76,12 +76,17 @@ const ui = {
   //PLANNER
   plannerContainer: document.querySelector(".planner-container"),
   clearAllPlans: document.querySelector("#clear-all-planner"),
+  //GOALS
+  goalsForm: document.querySelector("#goals-form"),
+  goalsInp: document.querySelector("#goal-inp"),
+  goalsContainer: document.querySelector(".goals-container"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   if (document.body.dataset.theme === "dark") {
     ui.themeBtn.checked = true;
   }
+  getCurrentLocation();
 });
 
 let getCurrentLocation = () => {
@@ -283,6 +288,58 @@ ui.plannerContainer.addEventListener("input", (e) => {
   savePlanner(allPlans);
 });
 
+//GOALS
+let saveGoals = (goals) => {
+  localStorage.setItem("goals", JSON.stringify(goals));
+};
+
+let getGoals = () => {
+  return JSON.parse(localStorage.getItem("goals")) || [];
+};
+
+let deleteGoal = (id) => {
+  let allGoals = getGoals();
+  let goalIndx = allGoals.findIndex((elem) => elem.id === id);
+  allGoals.splice(goalIndx, 1);
+  saveGoals(allGoals);
+  renderers["goals-feature"]();
+};
+
+ui.goalsForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let goal = ui.goalsInp.value;
+  if (goal.trim() === "") return alert("Please enter some value!");
+
+  let allGoals = getGoals();
+
+  allGoals.push({
+    id: Date.now(),
+    goal,
+    isDone: false,
+  });
+  saveGoals(allGoals);
+  renderers["goals-feature"]();
+  e.target.reset();
+});
+
+ui.goalsContainer.addEventListener("click", (e) => {
+  let clickedElem = e.target.closest(".close");
+  let goalTxt = e.target.closest(".container-goal>p");
+  let targetId = Number(e.target.closest(".container-goal").dataset.id);
+  if(clickedElem){
+    deleteGoal(targetId);
+  }
+  if(goalTxt){
+    let allGoals = getGoals()
+    let matchFound = allGoals.find(elem=>elem.id===targetId);
+    if(matchFound){
+      matchFound.isDone = !matchFound.isDone;
+    }
+    saveGoals(allGoals);
+    renderers["goals-feature"]();
+  }
+});
+
 let renderers = {
   "todo-feature": () => {
     taskList.innerHTML = "";
@@ -346,15 +403,15 @@ let renderers = {
     let allPlans = getPlanner();
 
     ui.plannerContainer.innerHTML = "";
-    
+
     let currentHr = new Date();
     for (let i = 6; i < 24; i++) {
       let li = document.createElement("li");
       let p = document.createElement("p");
       let inp = document.createElement("textArea");
       inp.dataset.hour = i;
-      if(i=== currentHr.getHours()){
-        li.classList.add("hightlight-task")
+      if (i === currentHr.getHours()) {
+        li.classList.add("hightlight-task");
       }
       p.textContent = `${String(i).padStart(2, 0)}:00 - ${String(i + 1).padStart(2, 0)}:00`;
       inp.type = "text";
@@ -365,7 +422,18 @@ let renderers = {
     }
   },
   "goals-feature": () => {
-    console.log("Goals feature called...");
+    let allGoals = getGoals();
+    ui.goalsContainer.innerHTML = "";
+    allGoals.forEach((elem) => {
+      ui.goalsContainer.innerHTML += `
+      <div class="container-goal" data-id = "${elem.id}">
+                  <p class="${elem.isDone===true?"line-through":""}">${elem.goal}</p>
+                  <div class="close">
+                    <i class="ri-close-line"></i>
+                  </div>
+      </div>
+      `;
+    });
   },
   "pomodoro-feature": () => {
     console.log("pomodoro feature called...");
