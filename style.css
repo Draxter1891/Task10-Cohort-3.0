@@ -211,6 +211,19 @@ main {
   top: 0;
   left: 0;
 }
+#feature-view .gen-instruct {
+  font-size: 0.7rem;
+  text-transform: lowercase;
+  font-style: italic;
+  word-spacing: 0.2rem;
+  letter-spacing: 0.2rem;
+  color: rgb(170, 170, 170);
+  z-index: 9;
+  position: fixed;
+  top: 0.2rem;
+  right: 50%;
+  transform: translate(50%);
+}
 #feature-view #back-btn {
   margin: 1rem;
   width: 2.5rem;
@@ -301,19 +314,6 @@ main {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-#todo-feature .tasks .todo-empty-state {
-  color: #797878;
-  font-size: 2rem;
-  font-weight: 200;
-  text-transform: capitalize;
-  text-align: center;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
-}
-#todo-feature .tasks .todo-empty-state::after {
-  content: " . . . ";
 }
 #todo-feature .task {
   display: flex;
@@ -494,10 +494,71 @@ main {
   background: #091c1f;
   border-radius: 1rem;
   padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#goals-feature .goals-hero .inp-div .form-headers {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#goals-feature .goals-hero .inp-div .form-headers .progress-container {
+  position: relative;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#goals-feature .goals-hero .inp-div .form-headers .progress-container .progress-ring {
+  transform: rotate(-90deg);
+}
+#goals-feature .goals-hero .inp-div .form-headers .progress-container .progress-ring .progress-ring-circle-bg {
+  stroke: #e6e6e6;
+  stroke-width: 2;
+  stroke-opacity: 0.3;
+}
+#goals-feature .goals-hero .inp-div .form-headers .progress-container .progress-ring .progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  stroke: #05b3f8;
+  stroke-width: 6;
+  stroke-dasharray: 188.5;
+  stroke-dashoffset: 188.5;
+  stroke-linecap: round;
+}
+#goals-feature .goals-hero .inp-div .form-headers .progress-container .progress-value {
+  position: absolute;
+  font-size: 1rem;
+  font-weight: bold;
+}
+#goals-feature .goals-hero .inp-div .form-headers #clear-all-goals {
+  padding: 0.2rem 1.5rem;
+  border: 1px solid #c20000;
+  border-radius: 5rem;
+  text-transform: capitalize;
+  font-size: 1rem;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+  transition: all ease 0.2s;
+  background: #f59c9c;
+  color: #c20000;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+#goals-feature .goals-hero .inp-div .form-headers #clear-all-goals:hover {
+  filter: brightness(1.2);
+}
+#goals-feature .goals-hero .inp-div .form-headers #clear-all-goals:active {
+  transform: scale(0.9);
+  filter: brightness(1);
 }
 #goals-feature .goals-hero .inp-div form {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -602,6 +663,22 @@ main {
   display: none;
 }
 
+.empty-state {
+  width: 100%;
+  color: #797878;
+  font-size: 1.5rem;
+  font-weight: 200;
+  text-transform: capitalize;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  margin: auto;
+}
+.empty-state::after {
+  content: " . . . ";
+}
+
 @media (min-width: 1024px) {
   #dashboard {
     background: url("./assets/media/moonblue.jpg") center/cover no-repeat;
@@ -659,7 +736,6 @@ main {
     height: 100%;
   }
   #goals-feature .goals-hero .inp-div #goals-form {
-    padding: 10rem 0;
     justify-content: flex-start;
     gap: 3rem;
   }

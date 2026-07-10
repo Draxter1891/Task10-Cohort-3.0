@@ -217,6 +217,19 @@ main {
   position: absolute;
   top: 0;
   left: 0;
+  .gen-instruct {
+    font-size: 0.7rem;
+    text-transform: lowercase;
+    font-style: italic;
+    word-spacing: 0.2rem;
+    letter-spacing: 0.2rem;
+    color: rgb(170, 170, 170);
+    z-index: 9;
+    position: fixed;
+    top: 0.2rem;
+    right: 50%;
+    transform: translate(50%);
+  }
   #back-btn {
     margin: 1rem;
     width: 2.5rem;
@@ -317,18 +330,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-
-    .todo-empty-state {
-      color: #797878;
-      font-size: 2rem;
-      font-weight: 200;
-      text-transform: capitalize;
-      text-align: center;
-      user-select: none;
-      &::after {
-        content: " . . . ";
-      }
-    }
   }
 
   .task {
@@ -511,22 +512,81 @@ main {
     width: 100%;
     height: 100%;
     display: flex;
-    // background: red;
     flex-direction: column;
     gap: 0.5rem;
-
     .inp-div {
       background: #091c1f;
       border-radius: 1rem;
       padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .form-headers {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        .progress-container {
+          position: relative;
+          height: fit-content;
+          width: fit-content;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .progress-ring {
+            transform: rotate(-90deg);
+            .progress-ring-circle-bg {
+              stroke: #e6e6e6;
+              stroke-width: 2;
+              stroke-opacity: 0.3;
+            }
+            .progress-ring-circle {
+              transition: stroke-dashoffset 0.35s;
+              stroke: #05b3f8;
+              stroke-width: 6;
+              stroke-dasharray: 188.5; //Total perimeter
+              stroke-dashoffset: 188.5; // Hidden portion
+              stroke-linecap: round;
+            }
+          }
+          .progress-value {
+            position: absolute;
+            font-size: 1rem;
+            font-weight: bold;
+          }
+        }
+        #clear-all-goals {
+          padding: 0.2rem 1.5rem;
+          border: 1px solid #c20000;
+          border-radius: 5rem;
+          text-transform: capitalize;
+          font-size: 1rem;
+          font-weight: 600;
+          -webkit-tap-highlight-color: transparent;
+          transition: all ease 0.2s;
+          background: #f59c9c;
+          color: #c20000;
+          font-size: 1.5rem;
+          cursor: pointer;
+          &:hover {
+            filter: brightness(1.2);
+          }
+          &:active {
+            transform: scale(0.9);
+            filter: brightness(1);
+          }
+        }
+      }
+
       form {
         width: 100%;
-        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 1rem;
+
         input {
           width: 80%;
           padding: 1rem;
@@ -596,7 +656,7 @@ main {
         //   top: .2rem;
         //   left: .2rem;
         // }
-        p{
+        p {
           font-size: 1rem;
         }
         .line-through {
@@ -636,6 +696,20 @@ main {
 
 .hidden {
   display: none;
+}
+
+.empty-state {
+  width: 100%;
+  color: #797878;
+  font-size: 1.5rem;
+  font-weight: 200;
+  text-transform: capitalize;
+  text-align: center;
+  user-select: none;
+  margin: auto;
+  &::after {
+    content: " . . . ";
+  }
 }
 
 //STYLING - DESKTOP VIEW
@@ -702,7 +776,6 @@ main {
         width: 35%;
         height: 100%;
         #goals-form {
-          padding: 10rem 0;
           justify-content: flex-start;
           gap: 3rem;
           button {

@@ -47,6 +47,7 @@ const WEATHER_CODES = {
 
   95: "⛈️ Thunderstorm",
 };
+
 //Selectors
 
 const ui = {
@@ -57,6 +58,7 @@ const ui = {
   themeIcon: document.querySelector("#theme-ico"),
   menu: document.querySelector(".right"),
   backBtn: document.querySelector("#back-btn"),
+  ecsBackLine: document.querySelector(".gen-instruct"),
 
   //date and time
   date: document.querySelector("#date"),
@@ -80,6 +82,10 @@ const ui = {
   goalsForm: document.querySelector("#goals-form"),
   goalsInp: document.querySelector("#goal-inp"),
   goalsContainer: document.querySelector(".goals-container"),
+  circle: document.querySelector(".progress-ring-circle"),
+  completedGoals: document.querySelector("#completed-goals"),
+  totalGoals: document.querySelector("#total-goals"),
+  dltAllGoals: document.querySelector("#clear-all-goals"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -87,7 +93,18 @@ document.addEventListener("DOMContentLoaded", () => {
     ui.themeBtn.checked = true;
   }
   getCurrentLocation();
+  checkDevice();
 });
+
+let checkDevice = () => {
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+  if (isMobile) {
+    ui.ecsBackLine.classList.add("hidden");
+  } else {
+    ui.ecsBackLine.classList.remove("hidden");
+  }
+};
 
 let getCurrentLocation = () => {
   navigator.geolocation.getCurrentPosition((e) => {
@@ -305,6 +322,36 @@ let deleteGoal = (id) => {
   renderers["goals-feature"]();
 };
 
+let completedGoalsCounter = (arr) => {
+  let counter = 0;
+  arr.forEach((elem) => {
+    if (elem.isDone === true) {
+      counter++;
+    }
+  });
+  return counter;
+};
+let totalGoalsCounter = (arr) => {
+  return arr.length;
+};
+
+let updateProgressCircle = (completed, total) => {
+  ui.completedGoals.textContent = completed;
+  ui.totalGoals.textContent = total;
+
+  let radius = ui.circle.r.baseVal.value;
+  let circum = (2 * Math.PI * radius).toFixed(2);
+
+  let percentage = total > 0 ? (completed / total) * 100 : 0;
+
+  let cappedPercentage = Math.min(Math.max(percentage, 0), 100);
+
+  let offset = circum - (cappedPercentage / 100) * circum;
+  console.log(`${offset.toFixed(2)}/${circum}`);
+
+  ui.circle.style.strokeDashoffset = offset.toFixed(2);
+};
+
 ui.goalsForm.addEventListener("submit", (e) => {
   e.preventDefault();
   let goal = ui.goalsInp.value;
@@ -322,17 +369,25 @@ ui.goalsForm.addEventListener("submit", (e) => {
   e.target.reset();
 });
 
+ui.dltAllGoals.addEventListener("click", () => {
+  let allGoals = getGoals();
+  if (allGoals.length === 0) return alert("No Goals to delete.");
+  allGoals = [];
+  saveGoals(allGoals);
+  renderers["goals-feature"]();
+});
+
 ui.goalsContainer.addEventListener("click", (e) => {
   let clickedElem = e.target.closest(".close");
   let goalTxt = e.target.closest(".container-goal>p");
   let targetId = Number(e.target.closest(".container-goal").dataset.id);
-  if(clickedElem){
+  if (clickedElem) {
     deleteGoal(targetId);
   }
-  if(goalTxt){
-    let allGoals = getGoals()
-    let matchFound = allGoals.find(elem=>elem.id===targetId);
-    if(matchFound){
+  if (goalTxt) {
+    let allGoals = getGoals();
+    let matchFound = allGoals.find((elem) => elem.id === targetId);
+    if (matchFound) {
       matchFound.isDone = !matchFound.isDone;
     }
     saveGoals(allGoals);
@@ -344,7 +399,7 @@ let renderers = {
   "todo-feature": () => {
     taskList.innerHTML = "";
     if (tasks.length === 0) {
-      taskList.innerHTML += `<h1 class="todo-empty-state">No Tasks yet<h1/>`;
+      taskList.innerHTML += `<h1 class="empty-state">No Tasks yet<h1/>`;
     }
     tasks.forEach((elem) => {
       taskList.innerHTML += `
@@ -424,16 +479,23 @@ let renderers = {
   "goals-feature": () => {
     let allGoals = getGoals();
     ui.goalsContainer.innerHTML = "";
-    allGoals.forEach((elem) => {
-      ui.goalsContainer.innerHTML += `
+    allGoals.length > 0
+      ? allGoals.forEach((elem) => {
+          ui.goalsContainer.innerHTML += `
       <div class="container-goal" data-id = "${elem.id}">
-                  <p class="${elem.isDone===true?"line-through":""}">${elem.goal}</p>
+                  <p class="${elem.isDone === true ? "line-through" : ""}">${elem.goal}</p>
                   <div class="close">
                     <i class="ri-close-line"></i>
                   </div>
       </div>
       `;
-    });
+        })
+      : (ui.goalsContainer.innerHTML = `<h2 class = "empty-state">Create your first goal<h2/>`);
+
+    updateProgressCircle(
+      completedGoalsCounter(allGoals),
+      totalGoalsCounter(allGoals),
+    );
   },
   "pomodoro-feature": () => {
     console.log("pomodoro feature called...");

@@ -59,7 +59,6 @@
               class="gifs"
             />
             <p class="feature-label">Planner</p>
-
           </div>
           <div class="feature-cta" data-feature="goals-feature">
             <i class="ri-target-fill"></i>
@@ -70,7 +69,6 @@
               class="gifs"
             />
             <p class="feature-label">Goals</p>
-
           </div>
           <div class="feature-cta" data-feature="pomodoro-feature">
             <i class="ri-timer-flash-line"></i>
@@ -96,6 +94,7 @@
       </section>
 
       <section id="feature-view" class="hidden">
+        <p class="gen-instruct hidden">Press Escape key to exit!</p>
         <button id="back-btn"><i class="ri-arrow-left-line"></i></button>
 
         <!-- Todo Section -->
@@ -116,7 +115,7 @@
               </button>
             </form>
 
-             <ul class="tasks" id="taskList">
+            <ul class="tasks" id="taskList">
               <!-- <li class="task">
                 <button
                   class="task-check"
@@ -171,9 +170,7 @@
         <section id="planner-feature" class="feature hidden">
           <h2>Plan your day</h2>
           <button id="clear-all-planner">Clear All</button>
-          <ul class="planner-container">
-          
-          </ul>
+          <ul class="planner-container"></ul>
         </section>
 
         <!-- Goals -->
@@ -181,21 +178,53 @@
           <h2>Goals</h2>
           <div class="goals-hero">
             <div class="inp-div">
+              <div class="form-headers">
+                <div class="progress-container">
+                  <svg class="progress-ring" width="120" height="120">
+                    <circle
+                      class="progress-ring-circle-bg"
+                      fill="transparent"
+                      r="30"
+                      cx="60"
+                      cy="60"
+                    />
+                    <circle
+                      class="progress-ring-circle"
+                      fill="transparent"
+                      r="30"
+                      cx="60"
+                      cy="60"
+                    />
+                  </svg>
+                  <div class="progress-value">
+                    <span id="completed-goals">_</span>/<span id="total-goals"
+                      >_</span
+                    >
+                  </div>
+                </div>
+                <button id="clear-all-goals">
+                  <i class="ri-delete-bin-2-fill"></i>
+                </button>
+              </div>
               <form id="goals-form">
-                <input type="text" placeholder="write your goal here..." id="goal-inp">
-                <button>Add</button>
+                <input
+                  type="text"
+                  placeholder="write your goal here..."
+                  id="goal-inp"
+                />
+                <button type="submit">Add</button>
               </form>
             </div>
             <div class="goals-container">
-                <div class="container-goal">
-                  <!-- <div class="check-done">
+              <div class="container-goal">
+                <!-- <div class="check-done">
 
                   </div> -->
-                  <p>Complete this task ASAP!</p>
-                  <div class="close">
-                    <i class="ri-close-line"></i>
-                  </div>
+                <p>Complete this task ASAP!</p>
+                <div class="close">
+                  <i class="ri-close-line"></i>
                 </div>
+              </div>
             </div>
           </div>
         </section>
