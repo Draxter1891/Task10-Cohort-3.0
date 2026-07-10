@@ -86,10 +86,14 @@ const ui = {
   completedGoals: document.querySelector("#completed-goals"),
   totalGoals: document.querySelector("#total-goals"),
   dltAllGoals: document.querySelector("#clear-all-goals"),
-  //
+  //Quotes
   quote: document.querySelector("#quote"),
   quoteAuthor: document.querySelector("#quote-author"),
   genQuote: document.querySelector("#gen-new-quote"),
+  //Pomodoro
+  pomotimer: document.querySelector("#pomodoro-time"),
+  pomoStart: document.querySelector("#pomodoro-start"),
+  pomoReset: document.querySelector("#pomodoro-reset"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -413,7 +417,6 @@ let fetchQuote = async () => {
   isLoading = true;
   const url = "https://dummyjson.com/quotes/random";
 
-  console.log(isLoading);
   try {
     const response = await fetch(url);
 
@@ -422,7 +425,6 @@ let fetchQuote = async () => {
     }
 
     const data = await response.json();
-    console.log(`Data fetched successfully: ${JSON.stringify(data, null, 2)}`);
     let lsQuote = getQuote();
     lsQuote = [];
     lsQuote.push(data);
@@ -431,16 +433,87 @@ let fetchQuote = async () => {
     console.log(error);
   } finally {
     isLoading = false;
-    console.log(isLoading);
     renderers["quote-feature"]();
   }
 };
 fetchQuote();
 ui.genQuote.addEventListener("click", () => {
-  console.log(isLoading);
   fetchQuote();
   renderers["quote-feature"]();
 });
+
+//Pomodoro
+const POMODORO_TIME = 25 * 60;
+
+let remainingSeconds = POMODORO_TIME;
+let timerId = null;
+
+const BUTTON_TEXT = {
+  idle: "Start",
+  running: "Pause",
+  paused: "Resume",
+};
+
+const TIMER_STATE = {
+  IDLE: "idle",
+  RUNNING: "running",
+  PAUSED: "paused",
+};
+
+let timerState = TIMER_STATE.IDLE;
+
+let startTimer = () => {
+  if (timerId) return;
+
+  timerState = TIMER_STATE.RUNNING;
+  renderers["pomodoro-feature"]();
+
+  timerId = setInterval(() => {
+    remainingSeconds--;
+
+    if (remainingSeconds <= 0) {
+      clearInterval(timerId);
+      timerId = null;
+      timerState = TIMER_STATE.IDLE;
+      remainingSeconds = POMODORO_TIME;
+      renderers["pomodoro-feature"]();
+      alert("Let's take a break!")
+      return;
+    }
+    renderers["pomodoro-feature"]();
+  }, 1000);
+};
+
+let pauseTimer = () => {
+  clearInterval(timerId);
+  timerId = null;
+  timerState = TIMER_STATE.PAUSED;
+  renderers["pomodoro-feature"]();
+};
+
+let resumeTimer = () => {
+  startTimer();
+};
+
+let resetTimer = () => {
+  clearInterval(timerId);
+  timerId = null;
+  remainingSeconds = POMODORO_TIME;
+  timerState = TIMER_STATE.IDLE;
+  renderers["pomodoro-feature"]();
+};
+
+ui.pomoStart.addEventListener("click", () => {
+  if (timerState === "idle") {
+    startTimer();
+  } else if (timerState === "running") {
+    pauseTimer();
+  } else if (timerState === "paused") {
+    resumeTimer();
+  }
+});
+
+ui.pomoReset.addEventListener("click", resetTimer);
 
 let renderers = {
   "todo-feature": () => {
@@ -545,11 +618,16 @@ let renderers = {
     );
   },
   "pomodoro-feature": () => {
-    console.log("pomodoro feature called...");
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = Math.floor(remainingSeconds % 60);
+
+    console.log(`${minutes} : ${seconds}`);
+    ui.pomotimer.textContent = `${String(minutes).padStart(2, "0")} : ${String(seconds).padStart(2, "0")}`;
+    ui.pomoStart.textContent = BUTTON_TEXT[timerState];
   },
+
   "quote-feature": () => {
     let lsQuote = getQuote();
-    console.log(lsQuote);
     if (isLoading || lsQuote.length === 0) {
       ui.quote.innerHTML = `<h2 class="empty-state">Quote is on the way<h2/>`;
       ui.quoteAuthor.textContent = "";

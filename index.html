@@ -115,9 +115,7 @@
               </button>
             </form>
 
-            <ul class="tasks" id="taskList">
-              
-            </ul>
+            <ul class="tasks" id="taskList"></ul>
           </div>
         </section>
 
@@ -185,17 +183,40 @@
         </section>
 
         <!-- Pomodoro -->
-        <section id="pomodoro-feature" class="feature hidden">Pomodoro</section>
+        <section id="pomodoro-feature" class="feature hidden">
+          <div class="pomodoro">
+            <h2 class="pomodoro-title">Focus Session</h2>
+
+            <p id="pomodoro-time">25:00</p>
+
+            <p class="pomodoro-status">Stay focused. One session at a time.</p>
+
+            <div class="pomodoro-actions">
+              <button id="pomodoro-start" class="btn btn--primary">
+                Start
+              </button>
+
+              <button id="pomodoro-reset" class="btn btn--secondary">
+                Reset
+              </button>
+            </div>
+          </div>
+        </section>
 
         <!-- Quote -->
         <section id="quote-feature" class="feature hidden">
           <div class="hero-quote">
             <div class="quote-container">
-              <h2 id="quote">Hare Krishna Hare Krishna, Krishna Krishna Hare Hare <br> Hare Rama Hare Rama, Rama Rama Hare Hare.</h2>
+              <h2 id="quote">
+                Hare Krishna Hare Krishna, Krishna Krishna Hare Hare <br />
+                Hare Rama Hare Rama, Rama Rama Hare Hare.
+              </h2>
               <h3 id="inverted-commas">"</h3>
               <p id="quote-author">-- Kishori Ju</p>
             </div>
-            <button id="gen-new-quote">Regenerate<i class="ri-loop-left-ai-line"></i></button>
+            <button id="gen-new-quote">
+              Regenerate<i class="ri-loop-left-ai-line"></i>
+            </button>
           </div>
         </section>
       </section>
