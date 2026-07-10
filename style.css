@@ -12,7 +12,8 @@
   --text-color: #292828;
   --professional-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
   --theme-icon-color: black;
-  --feature-bg: rgb(150, 232, 247);
+  --feature-bg: #a6ccd3;
+  --text-secondary: #535151;
 }
 
 [data-theme=dark] {
@@ -22,6 +23,7 @@
   --professional-shadow: 0 4px 24px -4px rgba(255, 255, 255, 0.04);
   --theme-icon-color: white;
   --feature-bg: #272727;
+  --text-secondary: #c7c4c4;
 }
 
 * {
@@ -659,16 +661,79 @@ main {
   transform: scale(0.9);
 }
 
+#quote-feature {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  background: var(--feature-bg);
+}
+#quote-feature .hero-quote {
+  height: inherit;
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  color: var(--text-color);
+}
+#quote-feature .hero-quote .quote-container {
+  width: 100%;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+}
+#quote-feature .hero-quote .quote-container h2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+#quote-feature .hero-quote .quote-container #inverted-commas {
+  font-size: 5rem;
+  color: orange;
+  position: absolute;
+  top: -1rem;
+  right: 0;
+}
+#quote-feature .hero-quote .quote-container p {
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+#quote-feature .hero-quote #gen-new-quote {
+  background: #98c8ff;
+  border: 1px solid #363eac;
+  font-size: 1rem;
+  font-weight: 900;
+  color: #363eac;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: transform ease 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  transition: all ease 0.3s;
+}
+#quote-feature .hero-quote #gen-new-quote:active {
+  transform: scale(0.95);
+}
+#quote-feature .hero-quote #gen-new-quote:hover {
+  filter: brightness(0.94);
+}
+
 .hidden {
   display: none;
 }
 
 .empty-state {
   width: 100%;
-  color: #797878;
+  color: var(--text-secondary);
   font-size: 1.5rem;
   font-weight: 200;
-  text-transform: capitalize;
+  text-transform: lowercase;
   text-align: center;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -752,5 +817,10 @@ main {
   }
   #goals-feature .goals-hero .goals-container .close {
     cursor: pointer;
+  }
+  #quote-feature .hero-quote .quote-container {
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 1rem 3rem;
   }
 }/*# sourceMappingURL=style.css.map */

@@ -86,6 +86,10 @@ const ui = {
   completedGoals: document.querySelector("#completed-goals"),
   totalGoals: document.querySelector("#total-goals"),
   dltAllGoals: document.querySelector("#clear-all-goals"),
+  //
+  quote: document.querySelector("#quote"),
+  quoteAuthor: document.querySelector("#quote-author"),
+  genQuote: document.querySelector("#gen-new-quote"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -395,6 +399,49 @@ ui.goalsContainer.addEventListener("click", (e) => {
   }
 });
 
+//Quotes
+let saveQuote = (quote) => {
+  localStorage.setItem("quote", JSON.stringify(quote));
+};
+
+let getQuote = () => {
+  return JSON.parse(localStorage.getItem("quote")) || [];
+};
+let isLoading = false;
+
+let fetchQuote = async () => {
+  isLoading = true;
+  const url = "https://dummyjson.com/quotes/random";
+
+  console.log(isLoading);
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed Fetching: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(`Data fetched successfully: ${JSON.stringify(data, null, 2)}`);
+    let lsQuote = getQuote();
+    lsQuote = [];
+    lsQuote.push(data);
+    saveQuote(lsQuote);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    isLoading = false;
+    console.log(isLoading);
+    renderers["quote-feature"]();
+  }
+};
+fetchQuote();
+ui.genQuote.addEventListener("click", () => {
+  console.log(isLoading);
+  fetchQuote();
+  renderers["quote-feature"]();
+});
+
 let renderers = {
   "todo-feature": () => {
     taskList.innerHTML = "";
@@ -501,6 +548,14 @@ let renderers = {
     console.log("pomodoro feature called...");
   },
   "quote-feature": () => {
-    console.log("quote feature called...");
+    let lsQuote = getQuote();
+    console.log(lsQuote);
+    if (isLoading || lsQuote.length === 0) {
+      ui.quote.innerHTML = `<h2 class="empty-state">Quote is on the way<h2/>`;
+      ui.quoteAuthor.textContent = "";
+    } else {
+      ui.quote.textContent = lsQuote[0].quote;
+      ui.quoteAuthor.textContent = `-- ${lsQuote[0].author}`;
+    }
   },
 };
