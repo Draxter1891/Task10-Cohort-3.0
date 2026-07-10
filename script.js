@@ -53,6 +53,7 @@ const WEATHER_CODES = {
 const ui = {
   body: document.body,
   dashboard: document.querySelector("#dashboard"),
+  city: document.querySelector("#city"),
   featureView: document.querySelector("#feature-view"),
   themeBtn: document.querySelector("#dark"),
   themeIcon: document.querySelector("#theme-ico"),
@@ -102,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   getCurrentLocation();
   checkDevice();
+  getCity();
 });
 
 let checkDevice = () => {
@@ -113,9 +115,13 @@ let checkDevice = () => {
     ui.ecsBackLine.classList.remove("hidden");
   }
 };
+let currentLatitude = null;
+let currentLongitude = null;
 
 let getCurrentLocation = () => {
   navigator.geolocation.getCurrentPosition((e) => {
+    currentLatitude = e.coords.latitude;
+    currentLongitude = e.coords.longitude;
     fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${e.coords.latitude}&longitude=${e.coords.longitude}&current=temperature_2m,weather_code`,
     )
@@ -143,7 +149,15 @@ let getCurrentDateTime = () => {
   let sec = now.getSeconds();
   return { date, day, month, year, hr, min, sec };
 };
+let getCity = async () => {
+  let response =
+    await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${currentLatitude}&longitude=${currentLongitude}&localityLanguage=en
+`);
 
+  let data = await response.json();
+  console.log(data);
+  ui.city.textContent = data.city;
+};
 let updateClock = () => {
   let timestamp = getCurrentDateTime();
   date.textContent = timestamp.date;
@@ -477,7 +491,7 @@ let startTimer = () => {
       timerState = TIMER_STATE.IDLE;
       remainingSeconds = POMODORO_TIME;
       renderers["pomodoro-feature"]();
-      alert("Let's take a break!")
+      alert("Let's take a break!");
       return;
     }
     renderers["pomodoro-feature"]();
