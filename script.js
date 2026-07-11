@@ -47,6 +47,17 @@ const WEATHER_CODES = {
 
   95: "⛈️ Thunderstorm",
 };
+let currentPeriod = "";
+
+const BGIMG = {
+  MORNING:
+    "https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/morning.mp4",
+  AFTERNOON:
+    "https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/afternoon.mp4",
+  EVENING: "/assets/media/eve.mp4",
+  NIGHT:
+    "https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/night.mp4",
+};
 
 //Selectors
 
@@ -54,7 +65,8 @@ const ui = {
   body: document.body,
   dashboard: document.querySelector("#dashboard"),
   city: document.querySelector("#city"),
-  infoCard:document.querySelector("#info"),
+  infoCardBG1: document.querySelector("#info1"),
+  infoCardBG2: document.querySelector("#info2"),
   featureView: document.querySelector("#feature-view"),
   themeBtn: document.querySelector("#dark"),
   themeIcon: document.querySelector("#theme-ico"),
@@ -67,7 +79,7 @@ const ui = {
   month: document.querySelector("#month"),
   year: document.querySelector("#year"),
   day: document.querySelector("#day"),
-  time: document.querySelector("time"),
+  time: document.querySelector("#time"),
 
   //weather
   temp: document.querySelector("#temp"),
@@ -104,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   getCurrentLocation();
   checkDevice();
-  getCity();
 });
 
 let checkDevice = () => {
@@ -116,59 +127,92 @@ let checkDevice = () => {
     ui.ecsBackLine.classList.remove("hidden");
   }
 };
-let currentLatitude = null;
-let currentLongitude = null;
 
 let getCurrentLocation = () => {
-  navigator.geolocation.getCurrentPosition((e) => {
-    currentLatitude = e.coords.latitude;
-    currentLongitude = e.coords.longitude;
-    fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${e.coords.latitude}&longitude=${e.coords.longitude}&current=temperature_2m,weather_code`,
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        ui.temp.textContent = data.current.temperature_2m;
-        ui.tempUnit.textContent = data.current_units.temperature_2m;
-        ui.weatherType.textContent = WEATHER_CODES[data.current.weather_code];
-      });
-  });
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      getCity(latitude, longitude);
+      getWeather(latitude, longitude);
+    },
+    (error) => {
+      console.log(error);
+    },
+  );
 };
-
-getCurrentLocation();
 
 let getCurrentDateTime = () => {
   const now = new Date();
+
   let date = now.getDate();
   let day = DAYS[now.getDay()];
   let month = MONTHS[now.getMonth()];
   let year = now.getFullYear();
-  let hr = now.getHours();
-  let min = now.getMinutes();
-  let sec = now.getSeconds();
-  return { date, day, month, year, hr, min, sec };
+  let time = now.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  let hour = now.getHours();
+  return { date, day, month, year, time, hour };
 };
-let getCity = async () => {
-  let response =
-    await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${currentLatitude}&longitude=${currentLongitude}&localityLanguage=en
+let getCity = async (currentLatitude, currentLongitude) => {
+  try {
+    let response =
+      await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${currentLatitude}&longitude=${currentLongitude}&localityLanguage=en
 `);
 
-  let data = await response.json();
-  ui.city.textContent = data.city;
+    let data = await response.json();
+    ui.city.textContent = data.city;
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+let getWeather = async (currentLatitude, currentLongitude) => {
+  fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${currentLatitude}&longitude=${currentLongitude}&current=temperature_2m,weather_code`,
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      ui.temp.textContent = data.current.temperature_2m;
+      ui.tempUnit.textContent = data.current_units.temperature_2m;
+      ui.weatherType.textContent = WEATHER_CODES[data.current.weather_code];
+    })
+    .catch((err) => {
+      console.log(err);
+      ui.temp.innerHTML = "";
+      ui.tempUnit.innerHTML = "";
+      ui.weatherType.innerHTML = "";
+    });
+};
+
 let updateClock = () => {
   let timestamp = getCurrentDateTime();
   date.textContent = timestamp.date;
   month.textContent = timestamp.month;
   year.textContent = timestamp.year;
   day.textContent = timestamp.day;
-  time.textContent = `${String(timestamp.hr).padStart(2, "0")} : ${String(timestamp.min).padStart(2, "0")} : ${String(timestamp.sec).padStart(2, "0")}`;
-  dynamicWallpaper(timestamp.hr);
-};
+  time.textContent = timestamp.time;
 
-setInterval(updateClock, 1000);
+  let calculatedPeriod = "";
+  if (timestamp.hour >= 5 && timestamp.hour < 12) {
+    calculatedPeriod = "MORNING";
+  } else if (timestamp.hour >= 12 && timestamp.hour < 17) {
+    calculatedPeriod = "AFTERNOON";
+  } else if (timestamp.hour >= 17 && timestamp.hour < 21) {
+    calculatedPeriod = "EVENING";
+  } else {
+    calculatedPeriod = "NIGHT";
+  }
+
+  if (calculatedPeriod !== currentPeriod) {
+    currentPeriod = calculatedPeriod;
+    dynamicWallpaper(timestamp.hour);
+  }
+};
 
 ui.themeBtn.addEventListener("change", (e) => {
   e.target.checked
@@ -215,18 +259,48 @@ let closeFeature = () => {
   ui.dashboard.classList.remove("hidden");
 };
 
+let currentVideo = ui.infoCardBG1;
+
+let playVideoSeemlessly = (url) => {
+  console.log(url);
+  const nextVideo =
+    currentVideo === ui.infoCardBG1 ? ui.infoCardBG2 : ui.infoCardBG1;
+
+  nextVideo.src = url;
+  nextVideo.playbackRate = 0.5;
+
+  nextVideo.addEventListener(
+    "canplay",
+    () => {
+      console.log("nextvideo event listener running!")
+      nextVideo.play();
+
+      nextVideo.classList.add("active");
+      nextVideo.classList.remove("secondary");
+
+      currentVideo.classList.remove("active");
+      currentVideo.classList.add("secondary");
+
+      currentVideo = nextVideo;
+    },
+    { once: true },
+  );
+};
+
 let dynamicWallpaper = (hr) => {
-  if (hr >= 5 && hr < 19) {
-    // dashboard.style.background =
-    //   "url('https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png') center/cover no-repeat";
-    // console.log(ui.infoCard)
+  if (hr >= 5 && hr < 10) {
+    playVideoSeemlessly(BGIMG.MORNING);
+  } else if (hr >= 10 && hr < 16) {
+    playVideoSeemlessly(BGIMG.AFTERNOON);
+  } else if (hr >= 16 && hr < 19) {
+    playVideoSeemlessly(BGIMG.EVENING);
   } else {
-    // dashboard.style.background =
-    //   "url('/assets/media/moonblue.jpg') left/cover no-repeat";
-    // console.log(ui.infoCard)
+    playVideoSeemlessly(BGIMG.NIGHT);
   }
 };
 
+updateClock();
+setInterval(updateClock, 1000);
 //TODO-feture
 let saveTasks = (tasks) => {
   localStorage.setItem("todo", JSON.stringify(tasks));
@@ -272,7 +346,6 @@ let taskMarkImp = (id) => {
 let taskMarkDone = (id) => {
   let clickedElem = tasks.find((elem) => elem.id === id);
   clickedElem.isCompleted = !clickedElem.isCompleted;
-  console.log(tasks);
   saveTasks(tasks);
   renderers["todo-feature"]();
 };
@@ -441,10 +514,7 @@ let fetchQuote = async () => {
     }
 
     const data = await response.json();
-    let lsQuote = getQuote();
-    lsQuote = [];
-    lsQuote.push(data);
-    saveQuote(lsQuote);
+    saveQuote([data]);
   } catch (error) {
     console.log(error);
   } finally {
@@ -535,7 +605,7 @@ let renderers = {
   "todo-feature": () => {
     taskList.innerHTML = "";
     if (tasks.length === 0) {
-      taskList.innerHTML += `<h1 class="empty-state">No Tasks yet<h1/>`;
+      taskList.innerHTML = `<h1 class="empty-state">No Tasks yet<h1/>`;
     }
     tasks.forEach((elem) => {
       taskList.innerHTML += `
@@ -554,8 +624,6 @@ let renderers = {
                     class="task-icon task-icon--star ${elem.isImp === true ? "task--important" : ""}"
                     aria-label="Mark important"
                     title="Important"
-                    class = "task-important"
-                    
                   >
                     <svg viewBox="0 0 24 24" width="16" height="16">
                       <path

@@ -9,12 +9,17 @@
       href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css"
       rel="stylesheet"
     />
+    <link
+      rel="shortcut icon"
+      href="https://ik.imagekit.io/udeluwj7a/Favicon-R/favicon.ico"
+      type="image/x-icon"
+    />
   </head>
   <!-- data-theme="dark" -->
   <body>
     <main class="app">
       <header class="header">
-        <h1>FocusX</h1>
+        <h1 id="logo">FocusX</h1>
         <label class="switch">
           <input type="checkbox" id="dark" />
           <span class="slider">
@@ -25,7 +30,23 @@
         </label>
       </header>
       <section id="dashboard">
-        <div class="left" id="info">
+        <div class="left">
+          <video
+            id="info1"
+            autoplay
+            muted
+            playsinline
+            loop
+            class="bg-video active"
+          ></video>
+          <video
+            id="info2"
+            autoplay
+            muted
+            playsinline
+            loop
+            class="bg-video secondary"
+          ></video>
           <div class="left-first">
             <h4>
               <span id="date">..</span> <span id="month">....</span> ,
@@ -34,9 +55,9 @@
             <h3><span id="day">...</span>, <span id="time">......</span></h3>
           </div>
           <div class="left-second">
-            <h3><span id="temp">..</span> <span id="temp-unit">..</span></h3>
+            <h3><span id="temp"></span> <span id="temp-unit"></span></h3>
             <h3 id="weather-type"></h3>
-            <h3 id="city">loading...</h3>
+            <h3 id="city">📍 Location unavailable</h3>
           </div>
         </div>
 
@@ -46,7 +67,6 @@
             <img
               src="https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/todo.webp"
               alt="todo"
-              id="todo-gif"
               class="gifs"
             />
             <p class="feature-label">Todo</p>
@@ -56,7 +76,6 @@
             <img
               src="https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/planner.webp"
               alt="todo"
-              id="todo-gif"
               class="gifs"
             />
             <p class="feature-label">Planner</p>
@@ -66,7 +85,6 @@
             <img
               src="https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/goal.webp"
               alt="todo"
-              id="todo-gif"
               class="gifs"
             />
             <p class="feature-label">Goals</p>
@@ -76,7 +94,6 @@
             <img
               src="https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/pomodoro.gif"
               alt="todo"
-              id="todo-gif"
               class="gifs"
             />
             <p class="feature-label">Pomodoro</p>
@@ -86,7 +103,6 @@
             <img
               src="https://ik.imagekit.io/udeluwj7a/COHORT-3.0/FocusX-Productivity%20Dashboard/motivation.webp"
               alt="todo"
-              id="todo-gif"
               class="gifs"
             />
             <p class="feature-label">motivation</p>
