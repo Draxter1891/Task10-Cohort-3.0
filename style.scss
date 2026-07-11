@@ -118,8 +118,7 @@ main {
   width: 100%;
   height: 90%;
   overflow-y: auto;
-  // background: url("https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png")
-  //  left / cover no-repeat;
+  background: var(--primary-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -864,7 +863,6 @@ main {
 //STYLING - DESKTOP VIEW
 @media (min-width: 1024px) {
   #dashboard {
-    background: url("./assets/media/moonblue.jpg") center / cover no-repeat;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

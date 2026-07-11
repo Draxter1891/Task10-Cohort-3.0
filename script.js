@@ -54,6 +54,7 @@ const ui = {
   body: document.body,
   dashboard: document.querySelector("#dashboard"),
   city: document.querySelector("#city"),
+  infoCard:document.querySelector("#info"),
   featureView: document.querySelector("#feature-view"),
   themeBtn: document.querySelector("#dark"),
   themeIcon: document.querySelector("#theme-ico"),
@@ -155,7 +156,6 @@ let getCity = async () => {
 `);
 
   let data = await response.json();
-  console.log(data);
   ui.city.textContent = data.city;
 };
 let updateClock = () => {
@@ -217,11 +217,13 @@ let closeFeature = () => {
 
 let dynamicWallpaper = (hr) => {
   if (hr >= 5 && hr < 19) {
-    dashboard.style.background =
-      "url('https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png') center/cover no-repeat";
+    // dashboard.style.background =
+    //   "url('https://images.template.net/78292/Free-Bright-Good-Morning-Vector-1.png') center/cover no-repeat";
+    // console.log(ui.infoCard)
   } else {
-    dashboard.style.background =
-      "url('/assets/media/moonblue.jpg') left/cover no-repeat";
+    // dashboard.style.background =
+    //   "url('/assets/media/moonblue.jpg') left/cover no-repeat";
+    // console.log(ui.infoCard)
   }
 };
 
