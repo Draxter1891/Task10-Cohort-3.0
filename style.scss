@@ -381,11 +381,11 @@ main {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #fff;
-    border: 1px solid #dedad1;
+    background: #9e00fa2a;
+    border: 1px solid rgba(206, 3, 206, 0.548);
     border-radius: 10px;
     padding: 12px 12px 12px 10px;
-    color: var(--text-color);
+    color: #292828;
     font-family: system-ui;
     border-left: 3px solid rgb(255, 196, 0);
     cursor: pointer;
@@ -413,8 +413,9 @@ main {
   .task-label {
     flex: 1;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 200;
     line-height: 1.4;
+    color: #280247;
   }
 
   .task-actions {
@@ -441,16 +442,17 @@ main {
   }
 
   .task-icon--star:hover {
-    color: #4a8cc9;
+    color: white;
+    background: rgba(255, 0, 212, 0.336);
   }
   .task-icon--delete:hover {
     color: #b5493a;
   }
 
   .task--important {
-    border-color: rgba(201, 123, 74, 0.4);
-    background: #4092fd3b;
-    color: #4092fd;
+    border-color: rgba(25, 10, 238, 0.4);
+    background: #ff00f2a6;
+    color: #f6e4fc;
   }
 
   .task-check {
@@ -458,11 +460,12 @@ main {
     border: 1px solid rgb(159, 159, 190);
   }
   .task--done {
-    background: #05b3f8;
+    background: #990294;
+    border: 2px solid rgba(36, 1, 37, 0.651);
   }
 
   .task-label-done {
-    color: #8a8680;
+    color: #ffffff;
     text-decoration: line-through;
   }
 }
