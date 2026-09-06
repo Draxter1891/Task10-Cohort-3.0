@@ -381,13 +381,13 @@ main {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #9e00fa2a;
-    border: 1px solid rgba(206, 3, 206, 0.548);
+    background: #f1c841;
+    border: 1px solid rgb(221, 133, 1);
     border-radius: 10px;
     padding: 12px 12px 12px 10px;
     color: #292828;
     font-family: system-ui;
-    border-left: 3px solid rgb(255, 196, 0);
+    border-left: 5px solid rgb(221, 133, 1);
     cursor: pointer;
   }
 
@@ -415,7 +415,7 @@ main {
     font-size: 1rem;
     font-weight: 200;
     line-height: 1.4;
-    color: #280247;
+    color: rgb(110, 67, 1);
   }
 
   .task-actions {
@@ -442,17 +442,18 @@ main {
   }
 
   .task-icon--star:hover {
-    color: white;
-    background: rgba(255, 0, 212, 0.336);
+    color: rgb(255, 94, 0);
+    background: rgba(238, 255, 0, 0.514);
   }
   .task-icon--delete:hover {
-    color: #b5493a;
+    color: red;
+    background:#ff00003a;
   }
 
   .task--important {
-    border-color: rgba(25, 10, 238, 0.4);
-    background: #ff00f2a6;
-    color: #f6e4fc;
+    border-color: rgba(255, 157, 9, 0.4);
+    background:  rgb(121, 73, 0);
+    color: rgb(252, 251, 250);
   }
 
   .task-check {
@@ -460,8 +461,8 @@ main {
     border: 1px solid rgb(159, 159, 190);
   }
   .task--done {
-    background: #990294;
-    border: 2px solid rgba(36, 1, 37, 0.651);
+    background: rgb(221, 133, 1);
+    border: 1px solid rgb(151, 91, 0);
   }
 
   .task-label-done {
